@@ -504,10 +504,10 @@ Qualifications:
       <!-- SCROLLABLE CANVAS VIEWPORT -->
       <div id="canvas-scroll-container" class="flex-1 overflow-auto p-2 sm:p-5 lg:p-8 flex justify-center items-start bg-zinc-950/90 relative">
         
-        <!-- A4 PAPER SHEET CONTAINER -->
-        <div id="a4-zoom-wrapper" class="relative mx-auto shrink-0 transition-all duration-150">
-          
-          <div id="print-page-wrapper" class="a4-sheet font-sans text-zinc-900 leading-relaxed absolute top-0 left-0 flex flex-col justify-between select-text" style="transform-origin: top left;">
+        <!-- A4 PAPER SHEET SCALER (Maintains scaled footprint on mobile & tablet) -->
+        <div id="a4-scaler" class="relative mx-auto shrink-0 transition-all duration-150">
+          <div id="a4-zoom-wrapper" class="origin-top-left transition-transform duration-150" style="width: 794px; min-width: 794px; height: 1123px;">
+            <div id="print-page-wrapper" class="a4-sheet font-sans text-zinc-900 leading-relaxed relative flex flex-col justify-between select-text">
             
             <!-- SHEET CONTENT WRAPPER -->
             <div id="sheet-body-content" class="flex-1 flex flex-col">
@@ -591,6 +591,7 @@ Qualifications:
 
           </div>
         </div>
+      </div>
 
       </div>
     </div>
@@ -947,6 +948,7 @@ Requirements:
     // Zoom Controls & Responsive Auto-Fit
     function applyAutoFit() {
       const container = document.getElementById('canvas-scroll-container');
+      const a4Scaler = document.getElementById('a4-scaler');
       if (!container) return;
       const containerWidth = container.clientWidth;
       if (!containerWidth) return;
@@ -958,7 +960,7 @@ Requirements:
       const a4HeightPx = 1123;
       
       if (zoomVal === 'auto') {
-        const padding = window.innerWidth < 640 ? 20 : (window.innerWidth < 1024 ? 36 : 48);
+        const padding = window.innerWidth < 640 ? 16 : (window.innerWidth < 1024 ? 32 : 48);
         const availableWidth = Math.max(260, containerWidth - padding);
         targetScale = Math.min(1.0, availableWidth / a4WidthPx);
       } else {
@@ -968,11 +970,14 @@ Requirements:
       const scaledWidth = Math.round(a4WidthPx * targetScale);
       const scaledHeight = Math.round(a4HeightPx * targetScale);
 
-      a4ZoomWrapper.style.width = `${scaledWidth}px`;
-      a4ZoomWrapper.style.height = `${scaledHeight}px`;
+      if (a4Scaler) {
+        a4Scaler.style.width = `${scaledWidth}px`;
+        a4Scaler.style.height = `${scaledHeight}px`;
+      }
 
-      printPageWrapper.style.transformOrigin = 'top left';
-      printPageWrapper.style.transform = `scale(${targetScale})`;
+      a4ZoomWrapper.style.transformOrigin = 'top left';
+      a4ZoomWrapper.style.transform = `scale(${targetScale})`;
+      printPageWrapper.style.transform = 'none';
     }
 
     zoomSelect.addEventListener('change', () => {
@@ -1604,17 +1609,18 @@ Instructions:
       const companyClean = (inputCompany.value || 'Company').replace(/[^a-zA-Z0-9]/g, '_');
       const filename = `Mukul_Mahajan_Cover_Letter_${companyClean}.pdf`;
 
+      // If user is on mobile/tablet editor tab, switch to preview tab so DOM has physical dimensions
+      if (window.innerWidth < 1024 && rightPanel.classList.contains('hidden')) {
+        setMobileTab('preview');
+      }
+
       showToast('Generating 1-page selectable PDF...', 'info');
 
       const element = document.getElementById('print-page-wrapper');
-      const originalWrapperWidth = a4ZoomWrapper.style.width;
-      const originalWrapperHeight = a4ZoomWrapper.style.height;
-      const originalPrintTransform = element.style.transform;
+      const originalTransform = a4ZoomWrapper.style.transform;
       
-      // Ensure zoom is at standard 1:1 scale during capture
-      a4ZoomWrapper.style.width = '794px';
-      a4ZoomWrapper.style.height = '1123px';
-      element.style.transform = 'scale(1)';
+      // Temporarily lock zoom to standard 1:1 scale during capture
+      a4ZoomWrapper.style.transform = 'scale(1)';
 
       const opt = {
         margin: [0, 0, 0, 0], // Explicit 4-element zero-margin for exact 1:1 page fit and accurate link hitboxes
@@ -1637,9 +1643,7 @@ Instructions:
       };
 
       const restoreZoom = () => {
-        a4ZoomWrapper.style.width = originalWrapperWidth;
-        a4ZoomWrapper.style.height = originalWrapperHeight;
-        element.style.transform = originalPrintTransform;
+        a4ZoomWrapper.style.transform = originalTransform;
       };
 
       if (window.html2pdf) {
