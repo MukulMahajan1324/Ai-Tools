@@ -1,0 +1,16 @@
+# Node & Dependencies
+node_modules/
+package-lock.json
+
+# Build & Test Artifacts
+*.pdf
+*.png
+*.log
+test-*.js
+inspect-*.js
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
