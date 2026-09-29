@@ -1434,8 +1434,9 @@ Instructions:
         const containerRect = container.getBoundingClientRect();
         if (!containerRect.width || !containerRect.height) return;
 
+        // Physical scale-invariance factors
         const pxToMm = 210 / containerRect.width;
-        const pxToPt = 72 / 96;
+        const mmToPt = 72 / 25.4; // 2.8346 pt per mm
 
         let defaultFamily = 'helvetica';
         if (container.classList.contains('font-serif')) {
@@ -1497,7 +1498,10 @@ Instructions:
             if (!r || r.width === 0 || r.height === 0) continue;
 
             const isNewLine = currentY === null || Math.abs(r.top - currentY) > r.height * 0.45;
-            const isLargeHorizontalGap = currentLine.length > 0 && (r.left - currentLine[currentLine.length - 1].rect.right > 24);
+            const prevWord = currentLine.length > 0 ? currentLine[currentLine.length - 1] : null;
+            const gapMm = prevWord ? (r.left - prevWord.rect.right) * pxToMm : 0;
+            // 5.5mm gap represents a separate column (e.g. left vs right header blocks)
+            const isLargeHorizontalGap = prevWord && (gapMm > 5.5);
 
             if (isNewLine || isLargeHorizontalGap) {
               if (currentLine.length > 0) {
@@ -1526,7 +1530,7 @@ Instructions:
             const w = words[i];
             if (i === 0) {
               str = w;
-            } else if (/^[.,;:!?\)\]]/.test(w)) {
+            } else if (/^[.,;:!?\)\]'’]/.test(w)) {
               str += w;
             } else if (str.endsWith('(') || str.endsWith('[')) {
               str += w;
@@ -1551,9 +1555,10 @@ Instructions:
             .replace(/\u2014/g, ' -- ')
             .replace(/\u2013/g, '-');
 
-          // Base font size derived from rendered line height
+          // Scale-invariant font size derived from physical line height in millimeters
           const lineHeightPx = firstWord.rect.bottom - firstWord.rect.top;
-          const baseFontSizePt = Math.max(7, Math.min(32, lineHeightPx * 0.82 * pxToPt));
+          const lineHeightMm = lineHeightPx * pxToMm;
+          const baseFontSizePt = Math.max(6, Math.min(36, lineHeightMm * 0.82 * mmToPt));
 
           let styleStr = 'normal';
           if (firstWord.isBold && firstWord.isItalic) styleStr = 'bolditalic';
@@ -1574,7 +1579,7 @@ Instructions:
           let calibratedFontSize = baseFontSizePt;
           if (basePdfWidthMm > 0 && cssLineWidthMm > 0) {
             const widthRatio = cssLineWidthMm / basePdfWidthMm;
-            const safeRatio = Math.max(0.88, Math.min(1.15, widthRatio));
+            const safeRatio = Math.max(0.85, Math.min(1.15, widthRatio));
             calibratedFontSize = baseFontSizePt * safeRatio;
           }
           pdf.setFontSize(calibratedFontSize);
@@ -1589,7 +1594,7 @@ Instructions:
           if (lineText.length > 1) {
             const diffMm = cssLineWidthMm - calibratedPdfWidthMm;
             charSpace = diffMm / (lineText.length - 1);
-            charSpace = Math.max(-0.06, Math.min(0.06, charSpace));
+            charSpace = Math.max(-0.05, Math.min(0.05, charSpace));
           }
 
           pdf.text(lineText, xMm, yMm, {
@@ -1617,9 +1622,16 @@ Instructions:
       showToast('Generating 1-page selectable PDF...', 'info');
 
       const element = document.getElementById('print-page-wrapper');
+      const a4Scaler = document.getElementById('a4-scaler');
       const originalTransform = a4ZoomWrapper.style.transform;
+      const originalScalerWidth = a4Scaler ? a4Scaler.style.width : '';
+      const originalScalerHeight = a4Scaler ? a4Scaler.style.height : '';
       
-      // Temporarily lock zoom to standard 1:1 scale during capture
+      // Temporarily lock zoom and scaler to standard 1:1 scale during capture
+      if (a4Scaler) {
+        a4Scaler.style.width = '794px';
+        a4Scaler.style.height = '1123px';
+      }
       a4ZoomWrapper.style.transform = 'scale(1)';
 
       const opt = {
@@ -1643,6 +1655,10 @@ Instructions:
       };
 
       const restoreZoom = () => {
+        if (a4Scaler) {
+          a4Scaler.style.width = originalScalerWidth;
+          a4Scaler.style.height = originalScalerHeight;
+        }
         a4ZoomWrapper.style.transform = originalTransform;
       };
 
