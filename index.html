@@ -164,57 +164,76 @@
 <body class="h-full flex flex-col bg-zinc-950 font-sans text-zinc-100 overflow-hidden">
 
   <!-- TOP HEADER / NAV -->
-  <header class="h-14 border-b border-zinc-800 bg-zinc-900/80 backdrop-blur-md px-5 flex items-center justify-between z-20 shrink-0">
-    <div class="flex items-center space-x-3">
-      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-zinc-950 font-black text-base shadow-sm">
+  <header class="h-14 border-b border-zinc-800 bg-zinc-900/90 backdrop-blur-md px-3 sm:px-5 flex items-center justify-between z-20 shrink-0">
+    <div class="flex items-center space-x-2 sm:space-x-3 min-w-0">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-zinc-950 font-black text-base shadow-sm shrink-0">
         <i data-lucide="sparkles" class="w-4 h-4 text-zinc-950"></i>
       </div>
-      <div>
-        <div class="flex items-center gap-2">
-          <h1 class="text-sm font-bold tracking-tight text-zinc-100">Cover Letter Studio</h1>
-          <span class="text-[10px] uppercase font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Pro</span>
+      <div class="min-w-0">
+        <div class="flex items-center gap-1.5 sm:gap-2">
+          <h1 class="text-xs sm:text-sm font-bold tracking-tight text-zinc-100 truncate">Cover Letter Studio</h1>
+          <span class="text-[9px] sm:text-[10px] uppercase font-semibold px-1.5 sm:px-2 py-0.2 sm:py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">Pro</span>
         </div>
-        <p class="text-[11px] text-zinc-400">Tailored, publication-ready PDF cover letters</p>
+        <p class="hidden sm:block text-[11px] text-zinc-400 truncate">Tailored, publication-ready PDF cover letters</p>
       </div>
     </div>
 
     <!-- Quick Actions & Model Toggle -->
-    <div class="flex items-center space-x-2">
+    <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
       <!-- AI Engine Indicator -->
-      <button id="toggle-api-modal-btn" class="flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-md bg-zinc-800 hover:bg-zinc-750 text-zinc-300 border border-zinc-700 transition">
+      <button id="toggle-api-modal-btn" title="AI Engine Settings" class="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 text-xs rounded-md bg-zinc-800 hover:bg-zinc-750 text-zinc-300 border border-zinc-700 transition">
         <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-ping"></span>
-        <span id="api-status-text">Smart AI Engine (Ready)</span>
+        <span id="api-status-text" class="hidden md:inline">Smart AI Engine (Ready)</span>
+        <span class="md:hidden text-[11px]">AI</span>
         <i data-lucide="settings" class="w-3.5 h-3.5 text-zinc-400"></i>
       </button>
 
-      <div class="h-4 w-px bg-zinc-800 mx-1"></div>
+      <div class="h-4 w-px bg-zinc-800 mx-0.5 sm:mx-1"></div>
 
       <!-- Copy Text -->
-      <button id="btn-copy-text" title="Copy raw text" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition">
+      <button id="btn-copy-text" title="Copy raw text" class="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 text-xs font-medium rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition">
         <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-        <span>Copy</span>
+        <span class="hidden sm:inline">Copy</span>
       </button>
 
       <!-- Print / Native Save Dialog -->
-      <button id="btn-print" title="Print or Save via Browser PDF" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition">
+      <button id="btn-print" title="Print or Save via Browser PDF" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-200 border border-zinc-700 transition">
         <i data-lucide="printer" class="w-3.5 h-3.5"></i>
         <span>Print</span>
       </button>
 
       <!-- Download PDF Button -->
-      <button id="btn-download-pdf" class="flex items-center gap-2 px-4 py-1.5 text-xs font-semibold rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 shadow-sm transition active:scale-95">
-        <i data-lucide="download" class="w-4 h-4"></i>
-        <span>Download PDF</span>
+      <button id="btn-download-pdf" title="Download Selectable PDF" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 text-xs font-semibold rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 shadow-sm transition active:scale-95">
+        <i data-lucide="download" class="w-3.5 sm:w-4 h-3.5 sm:h-4"></i>
+        <span><span class="hidden sm:inline">Download </span>PDF</span>
       </button>
     </div>
   </header>
 
-  <!-- MAIN WORKSPACE: SPLIT-SCREEN -->
-  <main class="flex-1 flex overflow-hidden">
+  <!-- MOBILE & TABLET RESPONSIVE TAB BAR (Visible on screens < lg) -->
+  <div id="mobile-tab-bar" class="lg:hidden bg-zinc-900 border-b border-zinc-800 px-3 py-2 flex items-center justify-between shrink-0">
+    <div class="flex items-center gap-1 bg-zinc-950 p-1 rounded-lg border border-zinc-800 w-full sm:w-auto">
+      <button id="tab-btn-editor" type="button" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-md bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition">
+        <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+        <span>Editor & Inputs</span>
+      </button>
+      <button id="tab-btn-preview" type="button" class="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-md text-zinc-400 hover:text-zinc-200 transition">
+        <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+        <span>Live A4 Preview</span>
+      </button>
+    </div>
+    <div class="hidden sm:flex items-center gap-1.5 text-[11px] text-zinc-400">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+      <span>Responsive A4 Canvas</span>
+    </div>
+  </div>
+
+  <!-- MAIN WORKSPACE: RESPONSIVE SPLIT-SCREEN -->
+  <main class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
     
     <!-- LEFT PANEL: INPUT CONTROLS -->
-    <div id="left-sidebar" class="w-full md:w-[460px] lg:w-[490px] border-r border-zinc-800 bg-zinc-900/60 flex flex-col shrink-0 overflow-y-auto">
-      <div class="p-5 space-y-6">
+    <div id="left-sidebar" class="w-full lg:w-[460px] xl:w-[490px] border-r border-zinc-800 bg-zinc-900/60 flex flex-col shrink-0 overflow-y-auto min-h-0">
+      <div class="p-4 sm:p-5 space-y-5 sm:space-y-6">
 
         <!-- STEP 1: TARGET ROLE & COMPANY -->
         <div class="space-y-3">
@@ -224,7 +243,7 @@
               Target Role & Company
             </label>
             <!-- Sample Preset Dropdown -->
-            <select id="preset-selector" class="text-xs bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-zinc-300 focus:outline-none focus:border-emerald-500">
+            <select id="preset-selector" class="text-xs bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-zinc-300 focus:outline-none focus:border-emerald-500 max-w-[170px] sm:max-w-none">
               <option value="">Load Example Role...</option>
               <option value="google">Google — Senior Product Designer</option>
               <option value="openai">OpenAI — Human-AI Interaction Designer</option>
@@ -233,7 +252,7 @@
             </select>
           </div>
 
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block text-[11px] font-medium text-zinc-400 mb-1">Company Name</label>
               <input id="input-company" type="text" placeholder="e.g. Google, Figma, Stripe" value="Google"
@@ -246,7 +265,7 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block text-[11px] font-medium text-zinc-400 mb-1">Hiring Manager / Team (Optional)</label>
               <input id="input-hiring-manager" type="text" placeholder="e.g. Product Design Hiring Team" value="Hiring Team"
@@ -273,7 +292,7 @@
             </div>
           </div>
           <div class="relative">
-            <textarea id="input-jd" rows="6" placeholder="Paste the job description, key responsibilities, qualifications, and required tools here..."
+            <textarea id="input-jd" rows="5" placeholder="Paste the job description, key responsibilities, qualifications, and required tools here..."
               class="w-full text-xs bg-zinc-950 border border-zinc-800 focus:border-emerald-500 rounded-lg p-3 text-zinc-200 placeholder-zinc-600 focus:outline-none font-mono transition leading-relaxed resize-y">We are looking for a Senior Product Designer to shape the future of multimodal AI experiences. 
 Responsibilities:
 - Lead end-to-end design initiatives from user discovery through system architecture and design handoff.
@@ -295,10 +314,10 @@ Qualifications:
               <span class="w-4 h-4 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px]">3</span>
               Your Profile (Default: Mukul Mahajan)
             </label>
-            <span class="text-[10px] text-zinc-500">Pre-filled with IIT Bombay profile</span>
+            <span class="hidden sm:inline text-[10px] text-zinc-500">Pre-filled with IIT Bombay profile</span>
           </div>
 
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block text-[11px] font-medium text-zinc-400 mb-1">Full Name</label>
               <input id="profile-name" type="text" value="Mukul Mahajan"
@@ -311,7 +330,7 @@ Qualifications:
             </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block text-[11px] font-medium text-zinc-400 mb-1">Phone</label>
               <input id="profile-phone" type="text" value="+91 93704 95393 • +91 94227 72385"
@@ -324,7 +343,7 @@ Qualifications:
             </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block text-[11px] font-medium text-zinc-400 mb-1">Portfolio / Behance</label>
               <input id="profile-website" type="text" value="Behance.net/MukulM"
@@ -354,7 +373,7 @@ Qualifications:
                 <!-- Rendered dynamically -->
               </div>
               <div class="flex-1 space-y-1">
-                <div class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2">
                   <label class="cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-200 border border-zinc-700 transition">
                     <i data-lucide="upload" class="w-3.5 h-3.5"></i>
                     <span>Upload Logo...</span>
@@ -377,7 +396,7 @@ Qualifications:
             </label>
           </div>
 
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label class="block text-[11px] font-medium text-zinc-400 mb-1">Tone & Voice</label>
               <select id="setting-tone" class="w-full text-xs bg-zinc-950 border border-zinc-800 focus:border-emerald-500 rounded-lg px-3 py-2 text-zinc-200 focus:outline-none">
@@ -413,16 +432,16 @@ Qualifications:
     </div>
 
     <!-- RIGHT PANEL: WYSIWYG LIVE A4 CANVAS & TOOLBAR -->
-    <div class="flex-1 bg-zinc-950 flex flex-col overflow-hidden">
+    <div id="right-panel" class="flex-1 bg-zinc-950 flex flex-col overflow-hidden min-w-0 min-h-0">
       
       <!-- CANVAS CONTROLS TOOLBAR -->
-      <div class="h-12 border-b border-zinc-800 bg-zinc-900/50 px-5 flex items-center justify-between shrink-0">
+      <div class="border-b border-zinc-800 bg-zinc-900/50 px-3 sm:px-5 py-2 flex flex-wrap items-center justify-between gap-2 shrink-0">
         
         <!-- Typography & Template Switchers -->
-        <div class="flex items-center space-x-3">
+        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
           <div class="flex items-center gap-1 text-xs text-zinc-400">
-            <span>Template:</span>
-            <select id="template-switcher" class="bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-xs text-zinc-200 focus:outline-none focus:border-emerald-500">
+            <span class="hidden sm:inline">Template:</span>
+            <select id="template-switcher" class="bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-xs text-zinc-200 focus:outline-none focus:border-emerald-500 max-w-[145px] sm:max-w-none">
               <option value="resume" selected>Resume Style (Royal Blue)</option>
               <option value="studio">Design Studio (mu logo)</option>
               <option value="modern">Modern Minimalist</option>
@@ -432,61 +451,63 @@ Qualifications:
           </div>
 
           <div class="flex items-center gap-1 text-xs text-zinc-400">
-            <span>Font:</span>
+            <span class="hidden sm:inline">Font:</span>
             <select id="font-switcher" class="bg-zinc-800 border border-zinc-700 rounded px-2 py-1 text-xs text-zinc-200 focus:outline-none focus:border-emerald-500">
-              <option value="font-sans">Inter / Modern Sans</option>
+              <option value="font-sans">Inter / Sans</option>
               <option value="font-serif">Newsreader Serif</option>
-              <option value="font-mono">Clean Monospace</option>
+              <option value="font-mono">Monospace</option>
             </select>
           </div>
         </div>
 
         <!-- Rich Text Quick Actions & Zoom -->
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center gap-1.5 sm:gap-2">
           <!-- Text Styling Tools -->
           <div class="flex items-center bg-zinc-800 border border-zinc-700 rounded-lg p-0.5">
-            <button onclick="formatDoc('bold')" title="Bold (Ctrl+B)" class="p-1.5 hover:bg-zinc-700 rounded text-zinc-300">
+            <button onclick="formatDoc('bold')" title="Bold (Ctrl+B)" class="p-1 sm:p-1.5 hover:bg-zinc-700 rounded text-zinc-300">
               <i data-lucide="bold" class="w-3.5 h-3.5"></i>
             </button>
-            <button onclick="formatDoc('italic')" title="Italic (Ctrl+I)" class="p-1.5 hover:bg-zinc-700 rounded text-zinc-300">
+            <button onclick="formatDoc('italic')" title="Italic (Ctrl+I)" class="p-1 sm:p-1.5 hover:bg-zinc-700 rounded text-zinc-300">
               <i data-lucide="italic" class="w-3.5 h-3.5"></i>
             </button>
-            <button onclick="formatDoc('insertUnorderedList')" title="Bullet List" class="p-1.5 hover:bg-zinc-700 rounded text-zinc-300">
+            <button onclick="formatDoc('insertUnorderedList')" title="Bullet List" class="p-1 sm:p-1.5 hover:bg-zinc-700 rounded text-zinc-300">
               <i data-lucide="list" class="w-3.5 h-3.5"></i>
             </button>
-            <button onclick="insertCustomLink()" title="Add Hyperlink" class="p-1.5 hover:bg-zinc-700 rounded text-zinc-300">
+            <button onclick="insertCustomLink()" title="Add Hyperlink" class="p-1 sm:p-1.5 hover:bg-zinc-700 rounded text-zinc-300">
               <i data-lucide="link" class="w-3.5 h-3.5"></i>
             </button>
           </div>
 
-          <div class="h-4 w-px bg-zinc-800 mx-1"></div>
+          <div class="h-4 w-px bg-zinc-800 mx-0.5 sm:mx-1"></div>
 
-          <!-- Zoom Selector -->
+          <!-- Zoom Selector with Auto Fit -->
           <div class="flex items-center gap-1 bg-zinc-800 border border-zinc-700 rounded-lg px-2 py-1 text-xs text-zinc-300">
             <i data-lucide="zoom-in" class="w-3.5 h-3.5 text-zinc-400"></i>
-            <select id="zoom-select" class="bg-transparent text-xs text-zinc-200 focus:outline-none">
+            <select id="zoom-select" class="bg-transparent text-xs text-zinc-200 focus:outline-none cursor-pointer">
+              <option value="auto" selected>Auto Fit</option>
+              <option value="0.5">50%</option>
               <option value="0.75">75%</option>
               <option value="0.85">85%</option>
-              <option value="1.0" selected>100%</option>
+              <option value="1.0">100%</option>
               <option value="1.15">115%</option>
             </select>
           </div>
 
           <!-- Edit status badge -->
-          <span class="text-[11px] text-zinc-400 flex items-center gap-1 ml-2">
+          <span class="hidden md:inline-flex text-[11px] text-zinc-400 items-center gap-1 ml-1">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-            Direct Click-to-Edit Enabled
+            Click-to-Edit
           </span>
         </div>
       </div>
 
       <!-- SCROLLABLE CANVAS VIEWPORT -->
-      <div id="canvas-scroll-container" class="flex-1 overflow-y-auto p-8 flex justify-center bg-zinc-950/90">
+      <div id="canvas-scroll-container" class="flex-1 overflow-auto p-2 sm:p-5 lg:p-8 flex justify-center items-start bg-zinc-950/90 relative">
         
         <!-- A4 PAPER SHEET CONTAINER -->
-        <div id="a4-zoom-wrapper" style="transform: scale(1); transform-origin: top center;">
+        <div id="a4-zoom-wrapper" class="relative mx-auto shrink-0 transition-all duration-150">
           
-          <div id="print-page-wrapper" class="a4-sheet font-sans text-zinc-900 leading-relaxed relative flex flex-col justify-between select-text">
+          <div id="print-page-wrapper" class="a4-sheet font-sans text-zinc-900 leading-relaxed absolute top-0 left-0 flex flex-col justify-between select-text" style="transform-origin: top left;">
             
             <!-- SHEET CONTENT WRAPPER -->
             <div id="sheet-body-content" class="flex-1 flex flex-col">
@@ -668,7 +689,11 @@ Qualifications:
     const editableLetterBody = document.getElementById('editable-letter-body');
     const footerTag = document.getElementById('footer-tag');
 
-    // Controls
+    // Controls & Panels
+    const leftSidebar = document.getElementById('left-sidebar');
+    const rightPanel = document.getElementById('right-panel');
+    const tabBtnEditor = document.getElementById('tab-btn-editor');
+    const tabBtnPreview = document.getElementById('tab-btn-preview');
     const templateSwitcher = document.getElementById('template-switcher');
     const fontSwitcher = document.getElementById('font-switcher');
     const zoomSelect = document.getElementById('zoom-select');
@@ -919,11 +944,124 @@ Requirements:
       inputJD.focus();
     });
 
-    // Zoom Controls
-    zoomSelect.addEventListener('change', (e) => {
-      const scale = parseFloat(e.target.value);
-      a4ZoomWrapper.style.transform = `scale(${scale})`;
+    // Zoom Controls & Responsive Auto-Fit
+    function applyAutoFit() {
+      const container = document.getElementById('canvas-scroll-container');
+      if (!container) return;
+      const containerWidth = container.clientWidth;
+      if (!containerWidth) return;
+      
+      const zoomVal = zoomSelect.value;
+      let targetScale = 1.0;
+      
+      const a4WidthPx = 794;
+      const a4HeightPx = 1123;
+      
+      if (zoomVal === 'auto') {
+        const padding = window.innerWidth < 640 ? 20 : (window.innerWidth < 1024 ? 36 : 48);
+        const availableWidth = Math.max(260, containerWidth - padding);
+        targetScale = Math.min(1.0, availableWidth / a4WidthPx);
+      } else {
+        targetScale = parseFloat(zoomVal) || 1.0;
+      }
+      
+      const scaledWidth = Math.round(a4WidthPx * targetScale);
+      const scaledHeight = Math.round(a4HeightPx * targetScale);
+
+      a4ZoomWrapper.style.width = `${scaledWidth}px`;
+      a4ZoomWrapper.style.height = `${scaledHeight}px`;
+
+      printPageWrapper.style.transformOrigin = 'top left';
+      printPageWrapper.style.transform = `scale(${targetScale})`;
+    }
+
+    zoomSelect.addEventListener('change', () => {
+      applyAutoFit();
     });
+
+    window.addEventListener('resize', () => {
+      if (zoomSelect.value === 'auto') {
+        applyAutoFit();
+      }
+    });
+
+    // Default to auto-fit on screens < 1024px (mobile & tablet)
+    if (window.innerWidth < 1024) {
+      zoomSelect.value = 'auto';
+    }
+
+    // Mobile / Tablet Tab Switcher (Editor vs Live Preview)
+    const urlParams = new URLSearchParams(window.location.search);
+    let currentMobileTab = (urlParams.get('tab') === 'preview' || window.location.hash === '#preview') ? 'preview' : 'editor';
+    function setMobileTab(tab) {
+      currentMobileTab = tab;
+      if (!leftSidebar || !rightPanel) return;
+
+      if (window.location.hash !== ('#' + tab)) {
+        try {
+          history.replaceState(null, '', '#' + tab);
+        } catch (e) {}
+      }
+
+      if (tab === 'editor') {
+        leftSidebar.classList.remove('hidden');
+        leftSidebar.classList.add('flex');
+        rightPanel.classList.add('hidden');
+        rightPanel.classList.remove('flex');
+        
+        if (tabBtnEditor && tabBtnPreview) {
+          tabBtnEditor.className = 'flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-md bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition';
+          tabBtnPreview.className = 'flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-md text-zinc-400 hover:text-zinc-200 transition';
+        }
+      } else {
+        leftSidebar.classList.add('hidden');
+        leftSidebar.classList.remove('flex');
+        rightPanel.classList.remove('hidden');
+        rightPanel.classList.add('flex');
+        
+        if (tabBtnEditor && tabBtnPreview) {
+          tabBtnPreview.className = 'flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-md bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 transition';
+          tabBtnEditor.className = 'flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold rounded-md text-zinc-400 hover:text-zinc-200 transition';
+        }
+        
+        // Recalculate auto-fit when switching to preview
+        setTimeout(applyAutoFit, 60);
+      }
+    }
+
+    window.addEventListener('hashchange', () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'preview' || hash === 'editor') {
+        setMobileTab(hash);
+      }
+    });
+
+    if (tabBtnEditor && tabBtnPreview) {
+      tabBtnEditor.addEventListener('click', () => setMobileTab('editor'));
+      tabBtnPreview.addEventListener('click', () => setMobileTab('preview'));
+    }
+
+    // Responsive breakpoint listener for tabs
+    function handleBreakpointChange() {
+      if (!leftSidebar || !rightPanel) return;
+      if (window.innerWidth >= 1024) {
+        // Desktop: show both side-by-side
+        leftSidebar.classList.remove('hidden');
+        leftSidebar.classList.add('flex');
+        rightPanel.classList.remove('hidden');
+        rightPanel.classList.add('flex');
+      } else {
+        // Mobile / Tablet: follow current active tab
+        setMobileTab(currentMobileTab);
+      }
+      if (zoomSelect.value === 'auto') {
+        applyAutoFit();
+      }
+    }
+    window.addEventListener('resize', handleBreakpointChange);
+    // Initialize view state
+    handleBreakpointChange();
+    setTimeout(applyAutoFit, 150);
 
     // Font Switcher
     fontSwitcher.addEventListener('change', (e) => {
@@ -1246,7 +1384,12 @@ Instructions:
         editableLetterBody.innerHTML = coverLetterHtml;
         syncFormToHeader();
 
-        showToast('Cover letter generated & tailored to role!', 'success');
+        if (window.innerWidth < 1024) {
+          setMobileTab('preview');
+          showToast('Cover letter generated! Switched to Live Preview.', 'success');
+        } else {
+          showToast('Cover letter generated & tailored to role!', 'success');
+        }
       } catch (err) {
         console.error(err);
         showToast('Error generating letter: ' + err.message, 'error');
@@ -1464,10 +1607,14 @@ Instructions:
       showToast('Generating 1-page selectable PDF...', 'info');
 
       const element = document.getElementById('print-page-wrapper');
-      const originalTransform = a4ZoomWrapper.style.transform;
+      const originalWrapperWidth = a4ZoomWrapper.style.width;
+      const originalWrapperHeight = a4ZoomWrapper.style.height;
+      const originalPrintTransform = element.style.transform;
       
       // Ensure zoom is at standard 1:1 scale during capture
-      a4ZoomWrapper.style.transform = 'scale(1)';
+      a4ZoomWrapper.style.width = '794px';
+      a4ZoomWrapper.style.height = '1123px';
+      element.style.transform = 'scale(1)';
 
       const opt = {
         margin: [0, 0, 0, 0], // Explicit 4-element zero-margin for exact 1:1 page fit and accurate link hitboxes
@@ -1489,6 +1636,12 @@ Instructions:
         pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
+      const restoreZoom = () => {
+        a4ZoomWrapper.style.width = originalWrapperWidth;
+        a4ZoomWrapper.style.height = originalWrapperHeight;
+        element.style.transform = originalPrintTransform;
+      };
+
       if (window.html2pdf) {
         html2pdf()
           .set(opt)
@@ -1506,16 +1659,16 @@ Instructions:
           })
           .save()
           .then(() => {
-            a4ZoomWrapper.style.transform = originalTransform;
+            restoreZoom();
             showToast(`Selectable 1-page PDF downloaded: ${filename}`, 'success');
           })
           .catch((err) => {
             console.error('html2pdf error:', err);
-            a4ZoomWrapper.style.transform = originalTransform;
+            restoreZoom();
             window.print();
           });
       } else {
-        a4ZoomWrapper.style.transform = originalTransform;
+        restoreZoom();
         window.print();
       }
     });
