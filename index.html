@@ -161,7 +161,7 @@
     }
   </style>
 </head>
-<body class="h-full flex flex-col bg-zinc-950 font-sans text-zinc-100 overflow-hidden">
+<body class="h-full h-[100dvh] flex flex-col bg-zinc-950 font-sans text-zinc-100 overflow-hidden">
 
   <!-- TOP HEADER / NAV -->
   <header class="h-14 border-b border-zinc-800 bg-zinc-900/90 backdrop-blur-md px-3 sm:px-5 flex items-center justify-between z-20 shrink-0">
@@ -229,11 +229,11 @@
   </div>
 
   <!-- MAIN WORKSPACE: RESPONSIVE SPLIT-SCREEN -->
-  <main class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
+  <main class="flex-1 flex flex-col lg:flex-row overflow-hidden relative min-h-0">
     
     <!-- LEFT PANEL: INPUT CONTROLS -->
-    <div id="left-sidebar" class="w-full lg:w-[460px] xl:w-[490px] border-r border-zinc-800 bg-zinc-900/60 flex flex-col shrink-0 overflow-y-auto min-h-0">
-      <div class="p-4 sm:p-5 space-y-5 sm:space-y-6">
+    <div id="left-sidebar" class="w-full lg:w-[460px] xl:w-[490px] border-r border-zinc-800 bg-zinc-900/60 flex-1 lg:flex-initial flex flex-col lg:shrink-0 overflow-y-auto min-h-0 touch-pan-y [overscroll-behavior-y:contain] [-webkit-overflow-scrolling:touch]">
+      <div class="p-4 sm:p-5 pb-24 sm:pb-8 space-y-5 sm:space-y-6">
 
         <!-- STEP 1: TARGET ROLE & COMPANY -->
         <div class="space-y-3">
@@ -502,7 +502,7 @@ Qualifications:
       </div>
 
       <!-- SCROLLABLE CANVAS VIEWPORT -->
-      <div id="canvas-scroll-container" class="flex-1 overflow-auto p-2 sm:p-5 lg:p-8 flex justify-center items-start bg-zinc-950/90 relative">
+      <div id="canvas-scroll-container" class="flex-1 overflow-auto p-2 sm:p-5 lg:p-8 pb-24 sm:pb-8 flex justify-center items-start bg-zinc-950/90 relative touch-pan-y [overscroll-behavior-y:contain] [-webkit-overflow-scrolling:touch]">
         
         <!-- A4 PAPER SHEET SCALER (Maintains scaled footprint on mobile & tablet) -->
         <div id="a4-scaler" class="relative mx-auto shrink-0 transition-all duration-150">
